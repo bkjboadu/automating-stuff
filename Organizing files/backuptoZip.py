@@ -26,4 +26,24 @@ def backupToZip(folder):
 
     print('Done')
 
+
+def create_zipfile(folder):
+    name = 'AlsPythonBook_'
+    number = 1
+    while True:
+        check_name = Path(folder) / Path(name + str(number) + '.zip')
+        print(check_name)
+        if not Path(check_name).exists():
+            break
+        number += 1
+
+    zipfile_name = name + str(number) + '.zip'
+    ExZip = zipfile.ZipFile(zipfile_name,'w')
+    for file in os.listdir(folder):
+        ExZip.write(file,compress_type=zipfile.ZIP_DEFLATED)
+        print(file)
+    ExZip.close()
+
+create_zipfile(Path.cwd())
+
 backupToZip(r'C:\delicious')

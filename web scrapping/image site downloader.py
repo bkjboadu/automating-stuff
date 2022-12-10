@@ -1,24 +1,25 @@
-from selenium import webdriver
-import pyperclip,sys,bs4,requests,os
+import requests,bs4,pyperclip,sys,os
+from pathlib import Path
 if len(sys.argv) > 1:
     keyword = ' '.join(sys.argv[1:])
 else:
-    keyword = pyperclip.paste()
+    keyword = 'lion'
 
 os.makedirs('imgur',exist_ok=True)
-on_search=requests.get('https://imgur.com/search?q=' + keyword)
-on_search_soup = bs4.BeautifulSoup(on_search.text,'html.parser')
-searchlist = on_search_soup.select('.post > .image-list-link img')
-try:
-    numOpen = len(searchlist)
-    for i in range(numOpen):
-        url = 'https:' + searchlist[i].get('src')
-        download = requests.get(url)
-        filename = os.path.join('imgur',url.basename())
-        save = open(filename,'wb')
-        for chunks in download.iter_content(1000000):
-            save.write(chunks)
-        save.close()
-except numOpen == 0:
-    raise Exception('no link found')
-print(searchlist)
+url = 'https://imgur.com/search?q='
+res = requests.get(url + keyword)
+res.raise_for_status()
+soup = bs4.BeautifulSoup(res.text,'html.parser')
+links = soup.select('.post > .image-list-link img')
+for i in range(len(links)):
+    new_url = 'https:' + links[i].get('src')
+    res = requests.get(new_url)
+    res.raise_for_status()
+    file_name = str(Path('imgur') / Path(new_url).name)
+    image_file = open(file_name,'wb')
+    for chunks in res.iter_content(100000):
+        image_file.write(chunks)
+    image_file.close()
+
+
+

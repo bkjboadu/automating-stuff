@@ -1,33 +1,18 @@
+import time
+print('Enter number:')
+x = input()
+while not x.isdecimal() or x == '0':
+    print('You need to enter a number and it should be greater than 0')
+    x = input()
 
-def collatz(number):
-    if number % 2 == 0:
-        value = number // 2
-        print(value)
-        return value
-    elif number % 2 == 1:
-        value = 3 * number + 1
-        print(value)
-        return value
-
-
-number = input('Enter number:')
-number = int(number)
-
-try:
-    result = collatz(number)
-    while result != 1:
-        result = collatz(result)
-        result
-except ValueError:
-    print('Please enter an integer')
-
-
-
-
-
-
-
-
-
-
-
+def collatz(x):
+    x = int(x)
+    while x != 1:
+        print(x)
+        if x % 2 == 0:
+            x = x // 2
+        elif x % 2 == 1:
+            x =  (3 * x) + 1
+        time.sleep(0.1)
+    print(x)
+collatz(x)

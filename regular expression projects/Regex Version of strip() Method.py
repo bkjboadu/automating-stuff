@@ -1,14 +1,13 @@
 import re
 
-def strip(text, remove = " "):
-    remove_start = re.compile(r'^[%s]' % remove)
+def strip(text,remove = ' '):
+    remove_begin = re.compile(r'^[%s]' % remove)
     remove_end = re.compile(r'[%s]$' % remove)
-    start = remove_start.findall(text)
-    end = remove_end.findall(text)
-    return text[len(start):len(text) - len(end)]
+    text = remove_begin.sub('',text)
+    text = remove_end.sub('',text)
+    print(text)
 
-utext = input('text:')
-ustrip = input('strip:')
-print(strip(utext,ustrip))
+text = input('Please enter text to strip: ')
+strip_value = input('Please enter what you want to strip: ')
 
-
+strip(text,strip_value)

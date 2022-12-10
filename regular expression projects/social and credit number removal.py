@@ -13,16 +13,13 @@ creregex = re.compile(r'''(
 (\d{4})   #fourth 4
 )''',re.VERBOSE)
 
-text = 'there are 456-25-6666 and 1245 1253 6541 6598 and 888-88-8888 and so much more 0000 0000 0000 0000'
-
+text = 'there are and so much more'
 for social in ssregex.findall(text):
     sisocial = re.compile(social[0])
     remove = sisocial.sub('',text)
     text = remove
-
 for credit in creregex.findall(text):
     cred = re.compile(credit[0])
     remove = cred.sub('',text)
     text = remove
-
 print(text)

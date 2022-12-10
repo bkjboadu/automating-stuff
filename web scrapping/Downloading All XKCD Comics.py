@@ -1,25 +1,29 @@
-import requests,os,bs4
+import webbrowser,requests,os,bs4
+from pathlib import Path
 
-url = 'https://xkcd.com/'
-os.makedirs('xkcd')
+os.makedirs('xkcd',exist_ok=True)
+url = 'https://xkcd.com'
 while not url.endswith('#'):
-    page = requests.get(url)
-    print(page.raise_for_status())
-    page_html = bs4.BeautifulSoup(page.text,'html.parser')
-    image_link = page_html.select('#comic img')
-    if image_link == []:
-        print('no download link found')
+    #get homepage request text
+    res = requests.get(url)
+    soup = bs4.BeautifulSoup(res.text,'html.parser')
+
+    comic_link = soup.select('#comic img')
+    if comic_link == []:
+        print('Could not find image to download')
     else:
-        comic_link = 'https:' + image_link[0].get('src')
-        download_link = requests.get(comic_link)
-        print(download_link.raise_for_status())
-        save_to_folder = os.path.join('xkcd',os.path.basename(comic_link))
-        image_file = open(save_to_folder,'wb')
-        for chunk in download_link.iter_content(100000):
-            image_file.write(chunk)
+        image_url = 'https:' + comic_link[0].get('src')
+        print(image_url)
+        res = requests.get(image_url)
+        res.raise_for_status()
 
-    previous_link_on_page = page_html.select('a[rel="prev"]')[0].get('href')
-    url = 'https://xkcd.com' + previous_link_on_page
+        image_file = open(Path('xkcd') / Path(image_url).name,'wb')
 
+        for chunck in res.iter_content(100000):
+            image_file.write(chunck)
+        image_file.close()
+
+        previous_link = soup.select('a[rel="prev"]')
+        url = 'https://xkcd.com' + previous_link[0].get('href')
 
 print('done')

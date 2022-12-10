@@ -1,11 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import requests,time
-# username = input('Enter email account to login to:')
-# password = input('Enter password:')
-# recipient_email = input('Recipient email:')
-# subject = input('Enter Subject:')
-# message = 'we making it happen'
 
 browser = webdriver.Chrome('chromedriver.exe')
 browser.get('https://accounts.google.com/signin/v2/identifier?service=mail')
@@ -18,7 +13,7 @@ time.sleep(5)
 
 #password
 password_to_login = browser.find_element_by_name('password')
-password_to_login.send_keys('7waepw8bb')
+password_to_login.send_keys('******')
 password_to_login.send_keys(Keys.ENTER)
 time.sleep(5)
 

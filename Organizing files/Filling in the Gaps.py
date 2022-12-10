@@ -1,25 +1,34 @@
-import re,os
+#Filling in the Gaps
+import os,re,shutil
 from pathlib import Path
 
-spamregex = re.compile(r'(spam(\d{2})\.txt)')
-
-path = os.getcwd()
+spam_regex = re.compile(r'(spam(\d{3})\.txt)')
 match = []
-for files in os.listdir(path):
-    if not spamregex.findall(files):
+
+for file in os.listdir(Path.cwd()):
+    spam = spam_regex.findall(str(file))
+    if not spam:
         continue
-    match.append(spamregex.findall(files)[0])
+    for spam in spam:
+        match.append(spam)
 
-print(match)
-new_name = [match[0]]
+New_Name = [match[0]]
+for i in range(len(match)):
+    try:
+        if int(match[i+1][1]) != int(New_Name[i][1]) + 1:
+            New_Name.append((match[i+1][0],str(int(New_Name[i][1]) + 1).zfill(3)))
+        else:
+            New_Name.append(match[i + 1])
+    except IndexError:
+        continue
 
-for i in range(len(match)-1):
-    if int(new_name[i][1]) != int(match[i+1][1]) - 1:
-        new_name.append(('spam' + str(int(new_name[i][1])+1) + '.txt',str(int(new_name[i][1])+1)))
-    else:
-        new_name.append(match[i+1])
 
-for i in range(len(new_name)):
-    os.rename(match[i][0],'spam' + str(int(new_name[i][1])) + '.txt')
+for names in New_Name:
+    rename = 'spam' + names[1] + '.txt'
+    shutil.move(Path.cwd() / names[0],Path.cwd() / rename)
 
-print(new_name)
+print('Done')
+
+
+
+

@@ -1,25 +1,21 @@
 import random
-coin = ['T','H']
-streak = 0
-num_of_streak = 0
-
-for i in range(10000):
-    flips = random.choices(coin, k=100)
-    for i in range(94):
-        for j in range(6):
-            if flips[i + j] == flips[i]:
-                streak += 1
-            else:
-                streak = 0
-
-        if streak < 6:
-            pass
+numberOfStreaks= 0
+streaks = 0
+for experimentNumber in range(10000):
+    outcomes = random.choices(['H','T'],k=100)
+    for i in range(len(outcomes)):
+        if outcomes[i] == outcomes[i-1]:
+            streaks += 1
         else:
-            num_of_streak += 1
+            streaks = 0
+
+        if streaks == 6:
+            numberOfStreaks += 1
+
+print('Chance of streak: %s%%' % (numberOfStreaks / 100))
 
 
-print(num_of_streak)
-print('Chance of streak: %s' % (num_of_streak / 10000))
+
 
 
 
